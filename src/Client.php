@@ -13,7 +13,7 @@ use Onetoweb\Parcelpro\Exception\{RequestException, InputException, FileExceptio
  * @author Jonathan van 't Ende <jvantende@onetoweb.nl>
  * @copyright Onetoweb B.V.
  * 
- * @link https://onetotrack.nujob.nl/api/doc/
+ * @link https://login.parcelpro.nl/api/docs/#introduction
  */
 class Client
 {
