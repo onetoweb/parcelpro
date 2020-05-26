@@ -1,0 +1,29 @@
+{
+    "name": "onetoweb/parcelpro",
+    "description": "Parcel Pro API Client",
+    "keywords": [
+        "api",
+        "php",
+        "parcel pro"
+    ],
+    "type": "library",
+    "homepage": "https://github.com/onetoweb/parcelpro",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jonathan van 't Ende",
+            "email": "jvantende@onetoweb.nl"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "guzzlehttp/guzzle": "^6.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Onetoweb\\Parcelpro\\": "src/"
+        }
+    },
+    "require-dev": {
+    }
+}
