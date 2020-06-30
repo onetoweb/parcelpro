@@ -4,11 +4,6 @@ require 'vendor/autoload.php';
 
 use Onetoweb\Parcelpro\Client;
 
-$userId = 1;
-$apiKey = 'apikey';
-
-$client = new Client($userId, $apiKey);
-
 // validate apikey
 $result = $client->validateApikey();
 
@@ -45,8 +40,8 @@ $pickupPoints = $client->getPickupPoints([
 // create shipment
 // https://login.parcelpro.nl/api/docs/#operation--nieuwe-zending
 $shipment = $client->createShipment([
-    'Carrier' => $shipmentType['Carrier'],
-    'Type' => $shipmentType['Id'],
+    'Carrier' => $shipmentType['CarrierNaam'],
+    'Type' => $shipmentType['Type'],
     'Naam' => 'Naam',
     'Straat' => 'Straat',
     'Nummer' => '1A',

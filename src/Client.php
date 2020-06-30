@@ -158,7 +158,7 @@ class Client
      */
     private function checkRequired(array $fields, array $data)
     {
-        foreach ($required as $field) {
+        foreach ($fields as $field) {
             
             if(!isset($data[$field])) {
                 throw new InputException("input data must contain the field: '$field'");
