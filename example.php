@@ -4,6 +4,11 @@ require 'vendor/autoload.php';
 
 use Onetoweb\Parcelpro\Client;
 
+$userId = '';
+$apiKey = 'apiKey';
+
+$client = new Client($userId, $apiKey);
+
 // validate apikey
 $result = $client->validateApikey();
 
@@ -27,7 +32,6 @@ $result = $client->accountExists($account['Email']);
 // get shimpment types
 $shipmentTypes = $client->getShipmentTypes();
 $shipmentType = $shipmentTypes[0];
-
 
 // get pickup points
 // https://login.parcelpro.nl/api/docs/#operation--uitreiklocaties
@@ -55,7 +59,14 @@ $shipment = $client->createShipment([
 ]);
 
 // get shipment label url
-$client->getLabelUrl($shipment['Id']);
+$labelUrl = $client->getLabelUrl($shipment['Id']);
+
+// get shipment label content
+$labelContents = $client->getLabelContents($shipment['Id']);
+
+// save shipment label
+$filename = '/path/to/file.pdf';
+$client->saveLabel($shipment['Id'], $filename);
 
 // get shipments
 // https://login.parcelpro.nl/api/docs/#operation--zendingen

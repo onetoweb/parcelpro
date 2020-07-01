@@ -5,6 +5,7 @@ namespace Onetoweb\Parcelpro;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
+use GuzzleHttp\Cookie\CookieJar;
 use Onetoweb\Parcelpro\Exception\{RequestException, InputException, FileException};
 
 /**
@@ -302,6 +303,50 @@ class Client
     public function getLabelUrl(string $shipmentId)
     {
         return self::BASE_URL . "api/label.php?GebruikerId={$this->userId}&ZendingId=$shipmentId&HmacSha256=" . $this->createHmacSha256([$this->userId, $shipmentId]);
+    }
+    
+    /**
+     * Get label contents
+     *
+     * @param string $shipmentId
+     *
+     * @return string base64 encoded
+     */
+    public function getLabelContents(string $shipmentId)
+    {
+        $url = $this->getLabelUrl($shipmentId);
+        
+        $client = new GuzzleClient();
+        $response = $client->request('GET', $url, [
+            RequestOptions::COOKIES => new CookieJar()
+        ]);
+        
+        if ($response->getStatusCode() != 200) {
+            
+            throw new RequestException("failed to download label from: $url", $resonse->getStatusCode());
+            
+        }
+        
+        return base64_encode($response->getBody()->getContents());
+    }
+    
+    /**
+     * Save label
+     * 
+     * @param string $shipmentId
+     * @param string $filename
+     */
+    public function saveLabel(string $shipmentId, string $filename)
+    {
+        $contents = base64_decode($this->getLabelContents($shipmentId));
+        
+        if (!is_writable(dirname($filename))) {
+            throw new FileException("file: $filename is not writable");
+        }
+        
+        if (file_put_contents($filename, $contents) === false) {
+            throw new FileException("file: $filename could not be saved");
+        }
     }
     
     /**
