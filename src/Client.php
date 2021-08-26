@@ -47,13 +47,13 @@ class Client
     /**
      * Send request
      *
-     * @param string $method = 'GET'
+     * @param string $method
      * @param string $endpoint
      * @param array $data = null
      *
      * @return array
      */
-    private function request(string $method = 'GET', string $endpoint, array $data = null)
+    private function request(string $method, string $endpoint, array $data = null)
     {
         $options = [
             RequestOptions::HEADERS => [
