@@ -7,6 +7,7 @@ use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
 use GuzzleHttp\Cookie\CookieJar;
 use Onetoweb\Parcelpro\Exception\{RequestException, InputException, FileException};
+use Onetoweb\Parcelpro\Config\Method;
 
 /**
  * Parcel Pro Api Client
@@ -18,27 +19,28 @@ use Onetoweb\Parcelpro\Exception\{RequestException, InputException, FileExceptio
  */
 class Client
 {
-    const BASE_URL = 'https://login.parcelpro.nl/';
-    
     /**
-     * @var int
+     * Base Url.
      */
-    private $userId;
+    public const BASE_URL = 'https://login.parcelpro.nl/';
     
     /**
      * @var string
      */
-    private $apiKey;
+    private GuzzleClient $client;
     
     /**
      * @param int $userId
      * @param string $apiKey
      */
-    public function __construct(int $userId, string $apiKey)
-    {
-        $this->userId = $userId;
-        $this->apiKey = $apiKey;
+    public function __construct(
         
+        #[\SensitiveParameter]
+        private int $userId,
+        
+        #[\SensitiveParameter]
+        private string $apiKey
+    ) {
         $this->client = new GuzzleClient([
             'base_uri' => self::BASE_URL,
         ]);
@@ -47,13 +49,13 @@ class Client
     /**
      * Send request
      *
-     * @param string $method
+     * @param Method $method
      * @param string $endpoint
-     * @param array $data = null
+     * @param array|null $data = null
      *
      * @return array
      */
-    private function request(string $method, string $endpoint, array $data = null)
+    private function request(Method $method, string $endpoint, ?array $data = null)
     {
         $options = [
             RequestOptions::HEADERS => [
@@ -67,7 +69,7 @@ class Client
             $options[RequestOptions::JSON] = $data;
         }
         
-        $result = $this->client->request($method, $endpoint, $options);
+        $result = $this->client->request($method->value, $endpoint, $options);
         
         $contents = $result->getBody()->getContents();
         
@@ -78,13 +80,13 @@ class Client
      * Send a GET request
      *
      * @param string $endpoint
-     * @param array $data = null
+     * @param array|null $data = null
      *
      * @return array
      */
-    private function get(string $endpoint, array $data = null)
+    private function get(string $endpoint, ?array $data = null)
     {
-        return $this->request('GET', $endpoint, $data);
+        return $this->request(Method::GET, $endpoint, $data);
     }
     
     /**
@@ -97,7 +99,7 @@ class Client
      */
     private function post(string $endpoint, array $data)
     {
-        return $this->request('POST', $endpoint, $data);
+        return $this->request(Method::POST, $endpoint, $data);
     }
     
     /**
@@ -110,7 +112,7 @@ class Client
      */
     private function put(string $endpoint, array $data)
     {
-        return $this->request('PUT', $endpoint, $data);
+        return $this->request(Method::PUT, $endpoint, $data);
     }
     
     /**
@@ -122,7 +124,7 @@ class Client
      */
     private function delete(string $endpoint)
     {
-        return $this->request('DELETE', $endpoint);
+        return $this->request(Method::DELETE, $endpoint);
     }
     
     /**

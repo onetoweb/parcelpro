@@ -12,4 +12,8 @@ composer require onetoweb/parcelpro
 
 ## Usage
 
-See example.php
+See [example.php](example.php)
+
+## Change Log
+
+See [Change Log](CHANGELOG.md)
